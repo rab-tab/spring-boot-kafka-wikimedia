@@ -9,6 +9,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.net.URI;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class WikimediaRecentChangesProducer {
@@ -17,7 +18,7 @@ public class WikimediaRecentChangesProducer {
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
 
-    public void sendMessage() {
+    public void sendMessage() throws InterruptedException {
         String topic = "wikimedia-recent-changes-topic";
 
         //real time stream data from wikimedia - Event Source
@@ -26,6 +27,8 @@ public class WikimediaRecentChangesProducer {
         EventSource.Builder builder = new EventSource.Builder(eventHandler, URI.create(url));
         EventSource eventSource = builder.build();
         eventSource.start();
+
+        Thread.sleep( 60000);
 
     }
 
